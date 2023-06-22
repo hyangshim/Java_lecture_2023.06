@@ -55,7 +55,7 @@ public class EX01_if {
 		System.out.print("연도 입력>");
 		Scanner scan =new Scanner(System.in);
 		int year =Integer.parseInt(scan.nextLine());
-		
+		scan.close();
 		String result;
 		if (year % 400 == 0) {
 			result ="윤년";

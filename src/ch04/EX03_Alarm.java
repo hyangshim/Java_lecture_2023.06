@@ -6,20 +6,20 @@ public class EX03_Alarm {
 
 	public static void main(String[] args) {
 	
-		System.out.print("시간 입력>");
-		System.out.print("분 입력>");
-		Scanner scan =new Scanner(System.in);
-		int h =Integer.parseInt(scan.nextLine());
-		int m =Integer.parseInt(scan.nextLine());
+		int hour, minute, newHour, newMin;
+		Scanner scan = new Scanner(System.in);
+		hour = scan.nextInt();
+		minute = scan.nextInt();
+		scan.close();
 		
-		if (m <45 && h == 1) {
-			System.out.println("12:"+(m+15));
-		}else if (m < 45) {
-			System.out.println((h-1)+":"+(m+15));
-		}else
-			System.out.println(h+":"+(m-45));
-		
-		
+		if (minute >= 45) {
+			newHour = hour;
+			newMin = minute - 45;
+		} else {
+			newHour = (hour + 24 - 1) % 24;
+			newMin = minute + 60 - 45;
+		}
+		System.out.printf("%02d:%02d", newHour, newMin);
 
 	}
 
