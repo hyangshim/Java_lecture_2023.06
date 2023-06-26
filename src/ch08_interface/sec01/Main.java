@@ -12,6 +12,8 @@ public class Main {
 		rc.turnOn();
 		rc.setVolume(8);
 		rc.turnOff();
+		
+		
 	}
 
 }
