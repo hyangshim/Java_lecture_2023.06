@@ -1,5 +1,7 @@
 package 연습문제;
 
+
+
 public class WeightAfterFiveMonths {
 	public static void main (String[] args) {
 		// 입력값 받기
@@ -18,4 +20,5 @@ public class WeightAfterFiveMonths {
 		}
 		return expectedWeight;
 	}
+
 }
