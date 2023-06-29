@@ -39,8 +39,6 @@ public class Ex04_Perfomance {
 		}
 		endTime =System.nanoTime();
 		System.out.println("ArrayList 걸린시간: " + (endTime -startTime)+" ns");
-
-		
 		
 		// LinkedList 뒤에 10000회 추가하는 경우 - 2.8 
 		startTime =System.nanoTime();
