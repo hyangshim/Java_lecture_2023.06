@@ -54,7 +54,13 @@ public class Ex05_sort {
 		//Comparator class 비교
 		list.sort(new MemberCompartor());
 		list.forEach(x -> System.out.println(x));
-		System.out.println("----------------------------------");
 		
+		System.out.println("----------------나이만 오름차순------------------");
+		list.sort(new MemberAgeCompartor());
+		list.forEach(x -> System.out.println(x));
+		
+		System.out.println("----------------이름만 오름차순------------------");
+		list.sort(new MemberNameCompartor());
+		list.forEach(x -> System.out.println(x));
 	}
 }
