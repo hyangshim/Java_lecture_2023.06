@@ -1,7 +1,9 @@
 package challenge;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -34,7 +36,14 @@ public class Q1_CountWord {
 			
 		}
 		// value로 sort
-		
+		List<Map.Entry<String, Integer>> entryList =new ArrayList<Map.Entry<String,Integer>>(map.entrySet());
+		//entryList.sort(Map.Entry.comparingByValue()); // value 오름차순
+		// 내림차순 정렬
+		entryList.sort(new MyComparator());
+		for (Map.Entry<String, Integer> entry:entryList) {
+			if (entry.getValue() >= 4)
+				System.out.println(entry.getKey()+":"+entry.getValue());
+		}
 	}
 
 }
