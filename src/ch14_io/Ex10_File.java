@@ -1,7 +1,6 @@
 package ch14_io;
 
 import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 
 public class Ex10_File {
