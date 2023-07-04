@@ -102,7 +102,7 @@ SELECT ROUND(AVG(population)) FROM city
 SELECT round(AVG(population)) AS avgPopulation FROM city 
 	WHERE countrycode='kor';	
 
--- 1.5그룹핑(Grouping)
+-- 1.6그룹핑(Grouping)
 
 --국내 광역시도별 도시의 갯수를 내림차순으로 조회
 SELECT district,COUNT(*) FROM city 
@@ -153,11 +153,46 @@ SELECT countrycode, COUNT(*), round(AVG(population)) AS avgPopulation FROM city
 	HAVING COUNT(*) >=100 
 	ORDER BY AVG(population) DESC;
 	
+--1.7 join
+
+-- 인구수 800만보다 큰 도시의 국가명,도시명,인구수
+SELECT country.Name,city.Name,city.Population FROM city
+	INNER JOIN country
+	ON city.CountryCode=country.Code
+	WHERE city.Population > 8000000;
+-- 테이블명 aliasing
+SELECT r.Name,l.Name,l.Population FROM city AS l
+	INNER JOIN country AS r
+	ON l.CountryCode=r.Code
+	WHERE l.Population > 8000000;	
 	
+-- 아시아 대륙에서 인구수가 가장 많은 도시 TOP 10
+SELECT l.Name,r.Name,r.Population,l.Continent FROM country AS l
+	JOIN city AS r 
+	ON l.Code =r.CountryCode
+	WHERE l.Continent='Asia'
+	ORDER BY r.Population DESC
+	LIMIT 10;
+	
+-- 우리나라의 공식 언어
+SELECT * FROM countrylanguage 
+WHERE countrycode ='kor' AND isofficial = 't';
+
+--아시아 국가의 국가명과 공식언어
+SELECT r.Name,l.`Language`,r.Continent FROM countrylanguage AS l
+	JOIN country AS r
+	ON l.CountryCode=r.Code
+	WHERE r.Continent='Asia' AND isofficial = 't';
+	
+	
+-- 아시아 대륙에서 인구수가 가장 많은 Top10 도시에서 사용하는 공식언어
+-- 3개의 테이블 --> 2회의 조인
+
 
 	
 	
 	
-
+	
+	
 
 
