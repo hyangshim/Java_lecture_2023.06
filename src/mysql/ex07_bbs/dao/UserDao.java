@@ -1,4 +1,4 @@
-package mysql.ex06.customer;
+package mysql.ex07_bbs.dao;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -6,23 +6,24 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-public class CustomerDao {
+import mysql.ex07_bbs.entity.User;
+
+public class UserDao {
 	private String host;
 	private String user;
 	private String password;
 	private String database;
 	private String port;
 	
-	public CustomerDao() {
+	public UserDao() {
 		try {
 			Properties props = new Properties();
-			InputStream is = new FileInputStream("D:/JavaWorkspace/Java/src/mysql/mysql.properties");
+			InputStream is = new FileInputStream("D:/JavaWorkspace/Java/src/mysql/ex07_bbs/mysql.properties");
 			props.load(is);
 			is.close();
 			
@@ -46,92 +47,89 @@ public class CustomerDao {
 		}
 		return conn;
 	}
-	
-	public Customer getCustomer(String uid) {
-		Customer c = null;
+	public User getUser(String uid) {
+		User u =null;
 		Connection conn = myConnection();
-		String sql = "select * from customer where uid=?";
+		String sql ="select * from users where uid=?";
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, uid);
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
-				uid = rs.getString(1);
-				String uname = rs.getString(2);
-				// LocalDate regDate = LocalDate.parse(rs.getDate(3).toString());
-				LocalDate regDate = LocalDate.parse(rs.getString(3));
-				int isDeleted = rs.getInt(4);
-				c = new Customer(uid, uname, regDate, isDeleted);
+				u = new User(rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),
+						LocalDate.parse(rs.getString(5)),rs.getInt(6));
 			}
-			rs.close(); pstmt.close(); conn.close();
+			rs.close();pstmt.close();conn.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return c;
+		return u;
 	}
-	
-	public List<Customer> getCustomerList() {
-		List<Customer> list = new ArrayList<Customer>();
+	public List<User>getUserList(int num,int offset){
+		List<User> list =new ArrayList<User>();
 		Connection conn = myConnection();
-		String sql = "select * from customer where isDeleted=0";
+		String sql = "select * from users where isDeleted=0 order by regDate desc limit ? offset ?";
 		try {
-			Statement stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery(sql);
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, num);
+			pstmt.setInt(2, offset);
+			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
-				Customer c = new Customer(rs.getString(1), rs.getString(2), 
-									LocalDate.parse(rs.getString(3)), rs.getInt(4));
-				list.add(c);
+				User u = new User(rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),
+						LocalDate.parse(rs.getString(5)),rs.getInt(6));
+				list.add(u);
 			}
-			rs.close(); stmt.close(); conn.close();
+			rs.close();pstmt.close();conn.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return list;
+		
 	}
-	
-	public void insertCustomer(Customer c) {
+	public void insertUser(User u) {
 		Connection conn = myConnection();
-		String sql = "insert into customer values (?, ?, default, default)";
+		String sql ="insert into users values (?,?,?,?,default,default)";
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, c.getUid());
-			pstmt.setString(2, c.getUname());
-			
+			pstmt.setString(1, u.getUid());
+			pstmt.setString(2, u.getPassword());
+			pstmt.setString(3, u.getUname());
+			pstmt.setString(4, u.getEmail());
 			pstmt.executeUpdate();
-			pstmt.close(); conn.close();
+			pstmt.close();conn.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
 	}
-
-	public void updateCustomer(Customer c) {
+	public void updateUser(User u) {
 		Connection conn = myConnection();
-		String sql = "update customer set uname=?, regDate=?, isDeleted=? where uid=?";
+		String sql ="update users set password=?, uname=?, regDate=?, email=? where uid=?";
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, c.getUname());
-			pstmt.setString(2, c.getRegDate().toString());
-			pstmt.setInt(3, c.getInDeleted());
-			pstmt.setString(4, c.getUid());
-			
+			pstmt.setString(1, u.getPassword());
+			pstmt.setString(2, u.getUname());
+			pstmt.setString(3, u.getRegDate().toString());
+			pstmt.setString(4, u.getEmail());
+			pstmt.setString(5, u.getUid());
 			pstmt.executeUpdate();
-			pstmt.close(); conn.close();
+			pstmt.close();conn.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
 	}
-
-	public void deleteCustomer(String uid) {
+	public void deleteUser(String uid) {
 		Connection conn = myConnection();
-		String sql = "update customer set isDeleted=1 where uid=?";
+		String sql ="update users set isDeleted=1 where uid=?";
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, uid);
-			
 			pstmt.executeUpdate();
-			pstmt.close(); conn.close();
+			pstmt.close();conn.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
 	}
 }
